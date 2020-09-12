@@ -1,6 +1,11 @@
 package user
 
 import (
+	"encoding/base64"
+	"encoding/hex"
+	"encoding/json"
+	"fmt"
+	"github.com/QXQZX/go-exam/middleware/crypto"
 	"github.com/QXQZX/go-exam/model"
 	"github.com/QXQZX/go-exam/pkg/app"
 	"github.com/QXQZX/go-exam/pkg/e"
@@ -11,6 +16,7 @@ import (
 	_ "github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	_ "github.com/unknwon/com"
+	"log"
 	_ "log"
 	"net/http"
 )
@@ -36,7 +42,7 @@ func GetUserinfos(c *gin.Context) {
 	//valid := validation.Validation{}
 	us := user_service.Userinfo{
 		PageNum:  util.GetPageOffset(c),
-		PageSize: setting.PageSize,
+		PageSize: setting.AppSetting.PageSize,
 		Query:    query,
 	}
 
@@ -112,7 +118,17 @@ func GetNotices(c *gin.Context) {
 	if notices, err := model.GetAllNotices(); err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
 	} else {
-		appG.Response(http.StatusOK, e.SUCCESS, notices)
+		marshal, _ := json.Marshal(&notices)
+		fmt.Println(string(marshal))
+		//bytes := []byte(notices)
+		fmt.Println(setting.AppSetting.AesSecret)
+		encrypted := crypto.AesEncryptECB(marshal, []byte(setting.AppSetting.AesSecret))
+		log.Println("密文(hex)：", hex.EncodeToString(encrypted))
+		log.Println("密文(base64)：", base64.StdEncoding.EncodeToString(encrypted))
+		decrypted := crypto.AesDecryptECB(encrypted, []byte(setting.AppSetting.AesSecret))
+		log.Println("解密结果：", string(decrypted))
+
+		appG.Response(http.StatusOK, e.SUCCESS, base64.StdEncoding.EncodeToString(encrypted))
 	}
 }
 

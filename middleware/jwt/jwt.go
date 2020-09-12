@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var jwtSecret = []byte(setting.JwtSecret)
+var jwtSecret = []byte(setting.AppSetting.JwtSecret)
 
 type Claims struct {
 	Username string `json:"username"`
@@ -24,7 +24,7 @@ func JWT() gin.HandlerFunc {
 		var data interface{}
 
 		code = e.SUCCESS
-		token := c.Query(setting.TokenHeader)
+		token := c.Query(setting.AppSetting.TokenHeader)
 		if token == "" {
 			code = e.INVALID_PARAMS
 		} else {

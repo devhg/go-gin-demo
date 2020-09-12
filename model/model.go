@@ -14,13 +14,13 @@ type Model struct {
 	ID int `gorm:"primary_key" json:"id"`
 }
 
-func init() {
+func Setup() {
 	var err error
-	db, err = gorm.Open(setting.DbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		setting.Username,
-		setting.Password,
-		setting.Host,
-		setting.DbName))
+	db, err = gorm.Open(setting.DatabaseSetting.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		setting.DatabaseSetting.Username,
+		setting.DatabaseSetting.Password,
+		setting.DatabaseSetting.Host,
+		setting.DatabaseSetting.DbName))
 
 	if err != nil {
 		log.Println(err)

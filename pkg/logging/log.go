@@ -29,10 +29,14 @@ const (
 	FATAL
 )
 
-func init() {
-	filePath := getLogFileFullPath()
-	F = openLogFile(filePath)
-
+func Setup() {
+	var err error
+	fileName := getLogFileName()
+	filePath := getLogFilePath()
+	F, err = openLogFile(fileName, filePath)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	logger = log.New(F, DefaultPrefix, log.LstdFlags)
 }
 
@@ -74,4 +78,16 @@ func setPrefix(level Level) {
 	}
 
 	logger.SetPrefix(logPrefix)
+	log.SetPrefix(logPrefix)
+}
+
+func LineInfo() string {
+	function := "xxx"
+	pc, file, line, ok := runtime.Caller(1)
+	if !ok {
+		file = "???"
+		line = 0
+	}
+	function = runtime.FuncForPC(pc).Name()
+	return fmt.Sprintf(" -> %s():%s:%d", function, file, line)
 }

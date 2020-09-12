@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/QXQZX/go-exam/model"
+	"github.com/QXQZX/go-exam/pkg/logging"
 	"github.com/QXQZX/go-exam/pkg/setting"
 	"github.com/QXQZX/go-exam/router"
+	"log"
 	"net/http"
 )
 
@@ -17,15 +20,25 @@ import (
 // @host 127.0.0.1:8081
 // @BasePath
 func main() {
+	setting.Setup()
+	model.Setup()
+	logging.Setup()
+
+	logging.Info("Ready to start.")
+
 	router := router.InitRouter()
 
-	s := &http.Server{
-		Addr:           fmt.Sprintf(":%d", setting.HttpPort),
+	server := &http.Server{
+		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HttpPort),
 		Handler:        router,
-		ReadTimeout:    setting.ReadTimeout,
-		WriteTimeout:   setting.WriteTimeout,
+		ReadTimeout:    setting.ServerSetting.ReadTimeout,
+		WriteTimeout:   setting.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	s.ListenAndServe()
+	err := server.ListenAndServe()
+	logging.Info("Started in ", server.Addr)
+	if err != nil {
+		log.Printf("Server error %v\n", err)
+	}
 }

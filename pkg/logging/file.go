@@ -2,6 +2,8 @@ package logging
 
 import (
 	"fmt"
+	"github.com/QXQZX/go-exam/pkg/file"
+	"github.com/QXQZX/go-exam/pkg/setting"
 	"log"
 	"os"
 	"time"
@@ -14,38 +16,50 @@ var (
 	TimeFormat  = "20060102"
 )
 
+// 获取日志的路径名
 func getLogFilePath() string {
-	return fmt.Sprintf("%s", LogSavePath)
+	return fmt.Sprintf("%s%s", setting.AppSetting.RuntimeRootPath,
+		setting.AppSetting.LogSavePath)
 }
 
+// 获取log的全名
+func getLogFileName() string {
+	return fmt.Sprintf("%s%s.%s",
+		setting.AppSetting.LogSaveName,
+		time.Now().Format(setting.AppSetting.TimeFormat),
+		setting.AppSetting.LogFileExt,
+	)
+}
+
+// 获取log的路径名+全名
 func getLogFileFullPath() string {
 	prefixPath := getLogFilePath()
-	suffixPath := fmt.Sprintf("%s%s.%s", LogSaveName, time.Now().Format(TimeFormat), LogFileExt)
+	suffixPath := getLogFileName()
 
 	return fmt.Sprintf("%s%s", prefixPath, suffixPath)
 }
 
-func openLogFile(filePath string) *os.File {
-	_, err := os.Stat(filePath)
-	switch {
-	case os.IsNotExist(err):
-		mkDir(getLogFilePath())
-	case os.IsPermission(err):
-		log.Fatalf("Permission :%v", err)
+func openLogFile(fileName, filePath string) (*os.File, error) {
+	dir, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("os.Getwd err: %v", err)
+	}
+	src := dir + "/" + filePath
+
+	perm := file.CheckPermission(src)
+	if perm == true {
+		return nil, fmt.Errorf("file.CheckPermission Permission denied src: %s", src)
 	}
 
-	handle, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	err = file.IsNotExistMkDir(src)
+	if err != nil {
+		return nil, fmt.Errorf("file.IsNotExistMkDir src: %s, err: %v", src, err)
+	}
+
+	f, err := file.Open(src+fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatalf("Fail to OpenFile :%v", err)
 	}
 
-	return handle
-}
-
-func mkDir(filePath string) {
-	dir, _ := os.Getwd()
-	err := os.MkdirAll(dir+"/"+getLogFilePath(), os.ModePerm)
-	if err != nil {
-		panic(err)
-	}
+	return f, nil
 }
