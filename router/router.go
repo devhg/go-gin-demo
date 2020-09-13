@@ -70,7 +70,10 @@ func InitRouter() *gin.Engine {
 		user.GET("/stat/:uid", userR.GetTrainStat)
 		user.GET("/standing", userR.GetUserinfos)
 		user.GET("/notice", userR.GetNotices)
+		// 文件上传
 		user.POST("/upload", handler.UploadImages)
+		//二维码制作
+		user.POST("/qrcode/generate", handler.GenerateArticlePoster)
 	}
 
 	admin := r.Group("/api/v1/admin")
