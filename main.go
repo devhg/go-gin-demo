@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-// @title go-exam
+// @title go-gin-demo
 // @version 1.0
 // @description 用go+gin搭建web网站后端接口
 // @contact.name API Support
@@ -36,8 +36,9 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	err := server.ListenAndServe()
 	logging.Info("Started in ", server.Addr)
+
+	err := server.ListenAndServe()
 	if err != nil {
 		log.Printf("Server error %v\n", err)
 	}

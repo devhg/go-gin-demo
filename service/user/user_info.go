@@ -1,4 +1,4 @@
-package user_service
+package user
 
 import (
 	"github.com/QXQZX/go-exam/model"

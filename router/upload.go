@@ -1,9 +1,9 @@
 package router
 //
 //import (
-//	"github.com/QXQZX/go-exam/pkg/app"
-//	"github.com/QXQZX/go-exam/pkg/e"
-//	"github.com/QXQZX/go-exam/pkg/logging"
+//	"github.com/QXQZX/go-gin-demo/pkg/app"
+//	"github.com/QXQZX/go-gin-demo/pkg/e"
+//	"github.com/QXQZX/go-gin-demo/pkg/logging"
 //	"net/http"
 //	"github.com/gin-gonic/gin"
 //)

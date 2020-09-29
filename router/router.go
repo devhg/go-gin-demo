@@ -1,9 +1,11 @@
 package router
 
 import (
-	"github.com/QXQZX/go-exam/handler"
-	userR "github.com/QXQZX/go-exam/handler/user"
-	"github.com/QXQZX/go-exam/middleware/Cors"
+	"github.com/QXQZX/go-exam/handler/common"
+	"github.com/QXQZX/go-exam/handler/contest"
+	"github.com/QXQZX/go-exam/handler/train"
+	"github.com/QXQZX/go-exam/handler/user"
+	"github.com/QXQZX/go-exam/middleware/cors"
 	"github.com/QXQZX/go-exam/pkg/setting"
 	"github.com/QXQZX/go-exam/pkg/upload"
 	"github.com/foolin/goview"
@@ -18,7 +20,7 @@ import (
 func InitRouter() *gin.Engine {
 	r := gin.New()
 
-	r.Use(Cors.Cors())
+	r.Use(cors.Cors())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
@@ -58,28 +60,16 @@ func InitRouter() *gin.Engine {
 
 	//文件系统
 	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
+	// 文件上传
+	r.POST("/upload", common.UploadImages)
+	//二维码制作
+	r.POST("/qrcode/generate", common.GenerateArticlePoster)
 
-	user := r.Group("/user")
-	{
-		user.POST("/login", GetAuth)
-		user.POST("/register", userR.Register)
-		user.POST("/feedback", userR.AddFeedback)
-		user.POST("/updatePwd", userR.UpdatePwd)
-
-		user.GET("/info/:uid", userR.GetUserinfoByUid)
-		user.GET("/stat/:uid", userR.GetTrainStat)
-		user.GET("/standing", userR.GetUserinfos)
-		user.GET("/notice", userR.GetNotices)
-		// 文件上传
-		user.POST("/upload", handler.UploadImages)
-		//二维码制作
-		user.POST("/qrcode/generate", handler.GenerateArticlePoster)
-	}
-
-	admin := r.Group("/api/v1/admin")
-	{
-		admin.GET("/info", userR.GetUserinfos)
-	}
+	//接口注册
+	api := r.Group("/api/v1")
+	contest.RegisteContest(api)
+	train.RegisteTrain(api)
+	user.RegisteUser(api)
 
 	return r
 }

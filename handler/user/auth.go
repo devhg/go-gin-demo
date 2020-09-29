@@ -1,4 +1,4 @@
-package router
+package user
 
 import (
 	"github.com/QXQZX/go-exam/middleware/jwt"
@@ -23,7 +23,7 @@ type auth struct {
 func GetAuth(c *gin.Context) {
 	appG := app.Gin{C: c}
 	var auth auth
-	httpStatus, eCode := app.BindAndValid(c, &auth)
+	httpStatus, eCode, _ := app.BindAndValid(c, &auth)
 
 	data := ""
 	code := e.INVALID_PARAMS

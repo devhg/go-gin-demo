@@ -1,4 +1,4 @@
-package handler
+package common
 
 import (
 	"github.com/QXQZX/go-exam/pkg/e"

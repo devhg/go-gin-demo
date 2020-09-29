@@ -12,7 +12,7 @@ import (
 	"github.com/QXQZX/go-exam/pkg/logging"
 	"github.com/QXQZX/go-exam/pkg/setting"
 	"github.com/QXQZX/go-exam/pkg/util"
-	"github.com/QXQZX/go-exam/service/user_service"
+	"github.com/QXQZX/go-exam/service/user"
 	_ "github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	_ "github.com/unknwon/com"
@@ -21,9 +21,24 @@ import (
 	"net/http"
 )
 
+func RegisteUser(route *gin.RouterGroup) {
+	userRoute := route.Group("user")
+	{
+		userRoute.POST("/login", GetAuth)
+		userRoute.POST("/register", Register)
+		userRoute.POST("/feedback", AddFeedback)
+		userRoute.POST("/updatePwd", UpdatePwd)
+
+		userRoute.GET("/info/:uid", GetUserinfoByUid)
+		userRoute.GET("/stat/:uid", GetTrainStat)
+		userRoute.GET("/standing", GetUserinfos)
+		userRoute.GET("/notice", GetNotices)
+	}
+}
+
 //类似spring的 servie注入
 //var (
-//	uss user_service.FeedbackService
+//	uss user.FeedbackService
 //)
 
 func GetUserinfos(c *gin.Context) {
@@ -40,7 +55,7 @@ func GetUserinfos(c *gin.Context) {
 		query["export"] = export
 	}
 	//valid := validation.Validation{}
-	us := user_service.Userinfo{
+	us := user.Userinfo{
 		PageNum:  util.GetPageOffset(c),
 		PageSize: setting.AppSetting.PageSize,
 		Query:    query,
@@ -73,7 +88,7 @@ func GetUserinfoByUid(c *gin.Context) {
 	appG := app.Gin{C: c}
 	uid := c.Param("uid")
 
-	us := user_service.Userinfo{
+	us := user.Userinfo{
 		Uid: uid,
 	}
 
@@ -93,15 +108,15 @@ type Feedback struct {
 func AddFeedback(c *gin.Context) {
 	appG := app.Gin{C: c}
 	var feed Feedback
-	httpCode, errCode := app.BindAndValid(c, &feed)
+	httpCode, errCode, errMsg := app.BindAndValid(c, &feed)
 	logging.Info(feed)
 
 	if errCode != e.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		appG.Response(httpCode, errCode, errMsg)
 		return
 	}
 
-	us := user_service.FeedbackService{
+	us := user.FeedbackService{
 		Content: feed.Content,
 		Contact: feed.Content,
 	}
