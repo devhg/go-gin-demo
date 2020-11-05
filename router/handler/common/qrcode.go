@@ -2,9 +2,9 @@ package common
 
 import (
 	"fmt"
-	"github.com/QXQZX/go-exam/pkg/app"
-	"github.com/QXQZX/go-exam/pkg/e"
-	"github.com/QXQZX/go-exam/pkg/qrcode"
+	"github.com/QXQZX/go-gin-demo/pkg/app"
+	"github.com/QXQZX/go-gin-demo/pkg/e"
+	"github.com/QXQZX/go-gin-demo/pkg/qrcode"
 	"github.com/boombuler/barcode/qr"
 	"github.com/gin-gonic/gin"
 	"net/http"

@@ -2,13 +2,12 @@ package upload
 
 import (
 	"fmt"
-	"github.com/QXQZX/go-exam/pkg/file"
-	"github.com/QXQZX/go-exam/pkg/logging"
-	"github.com/QXQZX/go-exam/pkg/setting"
-	"github.com/QXQZX/go-exam/pkg/util"
+	"github.com/QXQZX/go-gin-demo/pkg/file"
+	"github.com/QXQZX/go-gin-demo/pkg/logging"
+	"github.com/QXQZX/go-gin-demo/pkg/setting"
+	"github.com/QXQZX/go-gin-demo/pkg/util"
 	"mime/multipart"
 	"os"
-	"path"
 	"strings"
 )
 
@@ -19,11 +18,11 @@ func GetImageFullUrl(name string) string {
 
 // GetImageName get image name
 func GetImageName(name string) string {
-	ext := path.Ext(name)
+	ext := file.GetExt(name)
 	fileName := strings.TrimSuffix(name, ext)
 	fileName = util.EncodeMD5(fileName)
 
-	return fileName + ext
+	return fileName + ext //MD5(name-ext)+ext
 }
 
 // GetImagePath get save path
@@ -59,8 +58,8 @@ func CheckImageSize(f multipart.File) bool {
 	return size <= setting.AppSetting.ImageMaxSize
 }
 
-// CheckImage check if the file exists
-func CheckImage(src string) error {
+// CheckImage check if the file folder exists
+func CheckImagePath(src string) error {
 	dir, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("os.Getwd err: %v", err)

@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"github.com/QXQZX/go-exam/pkg/setting"
+	"github.com/QXQZX/go-gin-demo/pkg/setting"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"

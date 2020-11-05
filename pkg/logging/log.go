@@ -40,6 +40,7 @@ func Setup() {
 	logger = log.New(F, DefaultPrefix, log.LstdFlags)
 }
 
+//控制台和文件均会输出
 func Debug(v ...interface{}) {
 	setPrefix(DEBUG)
 	logger.Println(v)

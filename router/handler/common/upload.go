@@ -1,9 +1,9 @@
 package common
 
 import (
-	"github.com/QXQZX/go-exam/pkg/e"
-	"github.com/QXQZX/go-exam/pkg/logging"
-	"github.com/QXQZX/go-exam/pkg/upload"
+	"github.com/QXQZX/go-gin-demo/pkg/e"
+	"github.com/QXQZX/go-gin-demo/pkg/logging"
+	"github.com/QXQZX/go-gin-demo/pkg/upload"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -37,7 +37,7 @@ func UploadImages(c *gin.Context) {
 		if !upload.CheckImageExt(imageName) || !upload.CheckImageSize(file) {
 			code = e.ERROR_UPLOAD_CHECK_IMAGE_FORMAT
 		} else {
-			err := upload.CheckImage(fullPath)
+			err := upload.CheckImagePath(fullPath)
 			if err != nil {
 				logging.Warn(err)
 				code = e.ERROR_UPLOAD_CHECK_IMAGE_FAIL

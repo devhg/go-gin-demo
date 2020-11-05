@@ -5,14 +5,15 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/QXQZX/go-exam/middleware/crypto"
-	"github.com/QXQZX/go-exam/model"
-	"github.com/QXQZX/go-exam/pkg/app"
-	"github.com/QXQZX/go-exam/pkg/e"
-	"github.com/QXQZX/go-exam/pkg/logging"
-	"github.com/QXQZX/go-exam/pkg/setting"
-	"github.com/QXQZX/go-exam/pkg/util"
-	"github.com/QXQZX/go-exam/service/user"
+	"github.com/QXQZX/go-gin-demo/middleware/crypto"
+	"github.com/QXQZX/go-gin-demo/model"
+	"github.com/QXQZX/go-gin-demo/pkg/app"
+	"github.com/QXQZX/go-gin-demo/pkg/e"
+	"github.com/QXQZX/go-gin-demo/pkg/logging"
+	"github.com/QXQZX/go-gin-demo/pkg/setting"
+	"github.com/QXQZX/go-gin-demo/pkg/util"
+	"github.com/QXQZX/go-gin-demo/router/handler/common"
+	"github.com/QXQZX/go-gin-demo/service/user"
 	_ "github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	_ "github.com/unknwon/com"
@@ -21,10 +22,10 @@ import (
 	"net/http"
 )
 
-func RegisteUser(route *gin.RouterGroup) {
+func UserRegister(route *gin.RouterGroup) {
 	userRoute := route.Group("user")
 	{
-		userRoute.POST("/login", GetAuth)
+		userRoute.POST("/login", common.GetAuth)
 		userRoute.POST("/register", Register)
 		userRoute.POST("/feedback", AddFeedback)
 		userRoute.POST("/updatePwd", UpdatePwd)

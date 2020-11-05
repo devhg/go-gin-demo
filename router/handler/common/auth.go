@@ -1,10 +1,10 @@
-package user
+package common
 
 import (
-	"github.com/QXQZX/go-exam/middleware/jwt"
-	"github.com/QXQZX/go-exam/model"
-	"github.com/QXQZX/go-exam/pkg/app"
-	"github.com/QXQZX/go-exam/pkg/e"
+	"github.com/QXQZX/go-gin-demo/middleware/jwt"
+	"github.com/QXQZX/go-gin-demo/model"
+	"github.com/QXQZX/go-gin-demo/pkg/app"
+	"github.com/QXQZX/go-gin-demo/pkg/e"
 	"github.com/gin-gonic/gin"
 )
 

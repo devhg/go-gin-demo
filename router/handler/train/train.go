@@ -2,7 +2,7 @@ package train
 
 import "github.com/gin-gonic/gin"
 
-func RegisteTrain(route *gin.RouterGroup) {
+func TrainRegister(route *gin.RouterGroup) {
 	train := route.Group("/train")
 	{
 		train.GET("/", nil)

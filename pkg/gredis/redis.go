@@ -2,7 +2,7 @@ package gredis
 
 import (
 	"encoding/json"
-	"github.com/QXQZX/go-exam/pkg/setting"
+	"github.com/QXQZX/go-gin-demo/pkg/setting"
 	"time"
 
 	"github.com/gomodule/redigo/redis"

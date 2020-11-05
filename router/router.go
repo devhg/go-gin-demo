@@ -1,18 +1,18 @@
 package router
 
 import (
-	"github.com/QXQZX/go-exam/handler/common"
-	"github.com/QXQZX/go-exam/handler/contest"
-	"github.com/QXQZX/go-exam/handler/train"
-	"github.com/QXQZX/go-exam/handler/user"
-	"github.com/QXQZX/go-exam/middleware/cors"
-	"github.com/QXQZX/go-exam/pkg/setting"
-	"github.com/QXQZX/go-exam/pkg/upload"
+	"github.com/QXQZX/go-gin-demo/middleware/cors"
+	"github.com/QXQZX/go-gin-demo/pkg/setting"
+	"github.com/QXQZX/go-gin-demo/pkg/upload"
+	"github.com/QXQZX/go-gin-demo/router/handler/common"
+	"github.com/QXQZX/go-gin-demo/router/handler/contest"
+	"github.com/QXQZX/go-gin-demo/router/handler/train"
+	"github.com/QXQZX/go-gin-demo/router/handler/user"
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"html/template"
 	"net/http"
 )
@@ -53,6 +53,7 @@ func InitRouter() *gin.Engine {
 		})
 	})
 
+	// 整合swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	//r.StaticFile("/", "./views/exam/master.html")
@@ -67,9 +68,9 @@ func InitRouter() *gin.Engine {
 
 	//接口注册
 	api := r.Group("/api/v1")
-	contest.RegisteContest(api)
-	train.RegisteTrain(api)
-	user.RegisteUser(api)
+	contest.ContestRegister(api)
+	train.TrainRegister(api)
+	user.UserRegister(api)
 
 	return r
 }

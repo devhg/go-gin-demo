@@ -27,6 +27,8 @@ type App struct {
 
 	QrCodeSavePath string
 	PrefixUrl      string
+
+	ExportSavePath string
 }
 
 var AppSetting = &App{}

@@ -1,9 +1,9 @@
 package qrcode
 
 import (
-	"github.com/QXQZX/go-exam/pkg/file"
-	"github.com/QXQZX/go-exam/pkg/setting"
-	"github.com/QXQZX/go-exam/pkg/util"
+	"github.com/QXQZX/go-gin-demo/pkg/file"
+	"github.com/QXQZX/go-gin-demo/pkg/setting"
+	"github.com/QXQZX/go-gin-demo/pkg/util"
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
 	"image/jpeg"

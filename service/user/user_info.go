@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/QXQZX/go-exam/model"
+	"github.com/QXQZX/go-gin-demo/model"
 	"time"
 )
 
@@ -16,6 +16,7 @@ type FeedbackService struct {
 	Content string
 	Contact string
 }
+
 //获取全部用户信息
 func (i *Userinfo) GetAllInfo() ([]model.Userinfo, error) {
 	infos, err := model.GetUserInfos(i.PageNum, i.PageSize, i.Query)

@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/QXQZX/go-exam/model"
-	"github.com/QXQZX/go-exam/pkg/logging"
-	"github.com/QXQZX/go-exam/pkg/setting"
-	"github.com/QXQZX/go-exam/router"
+	_ "github.com/QXQZX/go-gin-demo/docs"
+	"github.com/QXQZX/go-gin-demo/model"
+	"github.com/QXQZX/go-gin-demo/pkg/logging"
+	"github.com/QXQZX/go-gin-demo/pkg/setting"
+	"github.com/QXQZX/go-gin-demo/router"
 	"log"
 	"net/http"
 )
