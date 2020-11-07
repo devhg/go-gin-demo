@@ -56,6 +56,17 @@ Docker
 ```shell script
 $ docker build -t gin-demo-docker .
 
-$ docker run -p 8081:8081 gin-demo-docker
+$ docker run -d -p 8081:8081 gin-demo-docker
+
+```
+
+使用小镜像
+```shell script
+
+$ CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o go-gin-demo .
+
+$ docker build -t gin-demo-docker-scratch .
+
+$ docker run -d -p 8081:8081 gin-demo-docker-scratch
 
 ```
