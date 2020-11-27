@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/QXQZX/go-gin-demo/pkg/e"
+	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/gin-gonic/gin"
 )
 

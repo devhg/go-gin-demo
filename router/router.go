@@ -1,13 +1,13 @@
 package router
 
 import (
-	"github.com/QXQZX/go-gin-demo/middleware/cors"
-	"github.com/QXQZX/go-gin-demo/pkg/setting"
-	"github.com/QXQZX/go-gin-demo/pkg/upload"
-	"github.com/QXQZX/go-gin-demo/router/handler/common"
-	"github.com/QXQZX/go-gin-demo/router/handler/contest"
-	"github.com/QXQZX/go-gin-demo/router/handler/train"
-	"github.com/QXQZX/go-gin-demo/router/handler/user"
+	"github.com/devhg/go-gin-demo/middleware/cors"
+	"github.com/devhg/go-gin-demo/pkg/setting"
+	"github.com/devhg/go-gin-demo/pkg/upload"
+	"github.com/devhg/go-gin-demo/router/handler/common"
+	"github.com/devhg/go-gin-demo/router/handler/contest"
+	"github.com/devhg/go-gin-demo/router/handler/train"
+	"github.com/devhg/go-gin-demo/router/handler/user"
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"

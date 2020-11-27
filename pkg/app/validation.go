@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/QXQZX/go-gin-demo/pkg/e"
+	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"

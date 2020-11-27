@@ -1,6 +1,6 @@
 package export
 
-import "github.com/QXQZX/go-gin-demo/pkg/setting"
+import "github.com/devhg/go-gin-demo/pkg/setting"
 
 const EXT = ".xlsx"
 

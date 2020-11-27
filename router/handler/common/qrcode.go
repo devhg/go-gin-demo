@@ -2,10 +2,10 @@ package common
 
 import (
 	"fmt"
-	"github.com/QXQZX/go-gin-demo/pkg/app"
-	"github.com/QXQZX/go-gin-demo/pkg/e"
-	"github.com/QXQZX/go-gin-demo/pkg/qrcode"
 	"github.com/boombuler/barcode/qr"
+	"github.com/devhg/go-gin-demo/pkg/app"
+	"github.com/devhg/go-gin-demo/pkg/e"
+	"github.com/devhg/go-gin-demo/pkg/qrcode"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

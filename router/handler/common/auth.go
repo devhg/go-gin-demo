@@ -1,10 +1,10 @@
 package common
 
 import (
-	"github.com/QXQZX/go-gin-demo/middleware/jwt"
-	"github.com/QXQZX/go-gin-demo/model"
-	"github.com/QXQZX/go-gin-demo/pkg/app"
-	"github.com/QXQZX/go-gin-demo/pkg/e"
+	"github.com/devhg/go-gin-demo/middleware/jwt"
+	"github.com/devhg/go-gin-demo/model"
+	"github.com/devhg/go-gin-demo/pkg/app"
+	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/gin-gonic/gin"
 )
 

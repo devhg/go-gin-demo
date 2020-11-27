@@ -1,11 +1,11 @@
 package qrcode
 
 import (
-	"github.com/QXQZX/go-gin-demo/pkg/file"
-	"github.com/QXQZX/go-gin-demo/pkg/setting"
-	"github.com/QXQZX/go-gin-demo/pkg/util"
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
+	"github.com/devhg/go-gin-demo/pkg/file"
+	"github.com/devhg/go-gin-demo/pkg/setting"
+	"github.com/devhg/go-gin-demo/pkg/util"
 	"image/jpeg"
 )
 

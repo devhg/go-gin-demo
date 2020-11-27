@@ -1,6 +1,9 @@
 
 # go web 项目脚手架
 
+关于目录结构建议参考
+https://github.com/golang-standards/project-layout
+
 ```ecmascript 6
 ├── Dockerfile
 ├── README.md

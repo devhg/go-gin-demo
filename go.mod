@@ -1,4 +1,4 @@
-module github.com/QXQZX/go-gin-demo
+module github.com/devhg/go-gin-demo
 
 go 1.13
 

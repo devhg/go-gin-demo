@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/QXQZX/go-gin-demo/model"
+	"github.com/devhg/go-gin-demo/model"
 	"time"
 )
 

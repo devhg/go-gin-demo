@@ -1,8 +1,8 @@
 package jwt
 
 import (
-	"github.com/QXQZX/go-gin-demo/pkg/e"
-	"github.com/QXQZX/go-gin-demo/pkg/setting"
+	"github.com/devhg/go-gin-demo/pkg/e"
+	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"

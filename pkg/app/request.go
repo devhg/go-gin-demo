@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/QXQZX/go-gin-demo/pkg/logging"
 	"github.com/astaxie/beego/validation"
+	"github.com/devhg/go-gin-demo/pkg/logging"
 )
 
 // MarkErrors logs error logs

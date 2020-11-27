@@ -1,9 +1,9 @@
 package common
 
 import (
-	"github.com/QXQZX/go-gin-demo/pkg/e"
-	"github.com/QXQZX/go-gin-demo/pkg/logging"
-	"github.com/QXQZX/go-gin-demo/pkg/upload"
+	"github.com/devhg/go-gin-demo/pkg/e"
+	"github.com/devhg/go-gin-demo/pkg/logging"
+	"github.com/devhg/go-gin-demo/pkg/upload"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"

@@ -2,10 +2,10 @@ package upload
 
 import (
 	"fmt"
-	"github.com/QXQZX/go-gin-demo/pkg/file"
-	"github.com/QXQZX/go-gin-demo/pkg/logging"
-	"github.com/QXQZX/go-gin-demo/pkg/setting"
-	"github.com/QXQZX/go-gin-demo/pkg/util"
+	"github.com/devhg/go-gin-demo/pkg/file"
+	"github.com/devhg/go-gin-demo/pkg/logging"
+	"github.com/devhg/go-gin-demo/pkg/setting"
+	"github.com/devhg/go-gin-demo/pkg/util"
 	"mime/multipart"
 	"os"
 	"strings"

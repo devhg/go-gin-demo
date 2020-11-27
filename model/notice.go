@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/QXQZX/go-gin-demo/pkg/app"
+	"github.com/devhg/go-gin-demo/pkg/app"
 )
 
 type Notice struct {
