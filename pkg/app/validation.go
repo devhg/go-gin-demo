@@ -1,13 +1,15 @@
 package app
 
 import (
-	"github.com/devhg/go-gin-demo/pkg/e"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
-	"net/http"
+
+	"github.com/devhg/go-gin-demo/pkg/e"
 )
 
 /**
@@ -23,18 +25,17 @@ var (
 )
 
 func init() {
-	//注册翻译器
+	// 注册翻译器
 	zh := zh.New()
 	uni = ut.New(zh, zh)
 
 	trans, _ = uni.GetTranslator("zh")
 
-	//获取gin的校验器
-	//validate = binding.Validator.Engine().(*validator.Validate)
+	// 获取gin的校验器
+	// validate = binding.Validator.Engine().(*validator.Validate)
 	validate = validator.New()
-	//注册翻译器
-	zh_translations.RegisterDefaultTranslations(validate, trans)
-
+	// 注册翻译器
+	_ = zh_translations.RegisterDefaultTranslations(validate, trans)
 }
 
 // BindAndValid binds and validates data

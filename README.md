@@ -5,54 +5,88 @@
 https://github.com/golang-standards/project-layout
 
 ```ecmascript 6
+.
 ├── Dockerfile
 ├── README.md
 ├── conf
-│   └── app.ini
+│   └── app.ini
+├── docs
+│   ├── docs.go
+│   ├── swagger.json
+│   └── swagger.yaml
+├── go-gin-demo
 ├── go.mod
 ├── go.sum
 ├── main.go
 ├── middleware
-│   ├── cors
-│   ├── crypto
-│   └── jwt
+│   ├── cors
+│   │   └── crossorigin.go
+│   ├── crypto
+│   │   └── crypto.go
+│   └── jwt
+│       └── jwt.go
 ├── model
-│   ├── feedback.go
-│   ├── model.go
-│   ├── notice.go
-│   ├── user.go
-│   └── userinfo.go
+│   ├── dao
+│   │   ├── feedback.go
+│   │   ├── model.go
+│   │   ├── notice.go
+│   │   ├── user.go
+│   │   └── userinfo.go
+│   └── service
+│       ├── admin
+│       ├── contest
+│       ├── notice
+│       ├── problem
+│       └── user
 ├── pkg
-│   ├── app
-│   ├── constvar
-│   ├── e
-│   ├── export
-│   ├── file
-│   ├── gredis
-│   ├── logging
-│   ├── qrcode
-│   ├── setting
-│   ├── upload
-│   └── util
+│   ├── app
+│   │   ├── localtime.go
+│   │   ├── request.go
+│   │   ├── response.go
+│   │   └── validation.go
+│   ├── constvar
+│   │   └── constvar.go
+│   ├── e
+│   │   ├── code.go
+│   │   └── msg.go
+│   ├── export
+│   │   └── excel.go
+│   ├── file
+│   │   └── file.go
+│   ├── gredis
+│   │   └── redis.go
+│   ├── logging
+│   │   ├── file.go
+│   │   └── log.go
+│   ├── qrcode
+│   │   └── qrcode.go
+│   ├── setting
+│   │   └── setting.go
+│   ├── upload
+│   │   └── image.go
+│   └── util
+│       ├── md5.go
+│       └── pagination.go
 ├── router
-│   ├── handler
-│   └── router.go
+│   ├── handler
+│   │   ├── common
+│   │   ├── contest
+│   │   ├── train
+│   │   └── user
+│   └── router.go
 ├── runtime
-│   ├── logs
-│   ├── qrcode
-│   └── upload
-├── service
-│   ├── admin
-│   ├── contest
-│   ├── notice
-│   ├── problem
-│   └── user
+│   └── logs
+│       └── log20210826.log
 └── views
     ├── exam
+    │   ├── favicon.ico
+    │   ├── index.html
+    │   └── static
     ├── index.html
     ├── layouts
+    │   ├── footer.html
+    │   └── master.html
     └── page.html
-
 ```
 
 Docker

@@ -2,11 +2,12 @@ package logging
 
 import (
 	"fmt"
-	"github.com/devhg/go-gin-demo/pkg/file"
-	"github.com/devhg/go-gin-demo/pkg/setting"
 	"log"
 	"os"
 	"time"
+
+	"github.com/devhg/go-gin-demo/pkg/file"
+	"github.com/devhg/go-gin-demo/pkg/setting"
 )
 
 var (
@@ -47,7 +48,7 @@ func openLogFile(fileName, filePath string) (*os.File, error) {
 	src := dir + "/" + filePath
 
 	perm := file.CheckPermission(src)
-	if perm == true {
+	if perm {
 		return nil, fmt.Errorf("file.CheckPermission Permission denied src: %s", src)
 	}
 

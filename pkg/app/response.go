@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/gin-gonic/gin"
+
+	"github.com/devhg/go-gin-demo/pkg/e"
 )
 
 type Gin struct {
@@ -22,5 +23,4 @@ func (g *Gin) Response(httpCode, errCode int, data interface{}) {
 		Msg:  e.GetMsg(errCode),
 		Data: data,
 	})
-	return
 }

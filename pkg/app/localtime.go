@@ -12,7 +12,6 @@ type LocalTime struct {
 }
 
 func (t LocalTime) MarshalJSON() ([]byte, error) {
-	//格式化秒
 	seconds := t.Unix()
 	return []byte(strconv.FormatInt(seconds, 10)), nil
 }

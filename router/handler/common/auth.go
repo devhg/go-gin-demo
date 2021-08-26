@@ -1,11 +1,12 @@
 package common
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/devhg/go-gin-demo/middleware/jwt"
-	"github.com/devhg/go-gin-demo/model"
+	"github.com/devhg/go-gin-demo/model/dao"
 	"github.com/devhg/go-gin-demo/pkg/app"
 	"github.com/devhg/go-gin-demo/pkg/e"
-	"github.com/gin-gonic/gin"
 )
 
 type auth struct {
@@ -28,7 +29,7 @@ func GetAuth(c *gin.Context) {
 	data := ""
 	code := e.INVALID_PARAMS
 	if eCode == 200 {
-		checkAuth, _ := model.CheckAuth(auth.Username, auth.Password)
+		checkAuth, _ := dao.CheckAuth(auth.Username, auth.Password)
 		if checkAuth {
 			token, err := jwt.GenerateToken(auth.Username, auth.Password)
 			if err != nil {

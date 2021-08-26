@@ -2,3 +2,5 @@
 .DS_Store
 
 runtime/*
+
+go-gin-demo

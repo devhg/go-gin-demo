@@ -5,5 +5,5 @@ const (
 )
 
 var (
-	author string = "devhui"
+	author = "devhg"
 )

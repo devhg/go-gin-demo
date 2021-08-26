@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	_ "github.com/devhg/go-gin-demo/docs"
-	"github.com/devhg/go-gin-demo/model"
+	"github.com/devhg/go-gin-demo/model/dao"
 	"github.com/devhg/go-gin-demo/pkg/logging"
 	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/devhg/go-gin-demo/router"
-	"log"
-	"net/http"
 )
 
 // @title go-gin-demo
@@ -22,7 +23,7 @@ import (
 // @BasePath
 func main() {
 	setting.Setup()
-	model.Setup()
+	dao.Setup()
 	logging.Setup()
 
 	logging.Info("Ready to start.")
@@ -30,7 +31,7 @@ func main() {
 	router := router.InitRouter()
 
 	server := &http.Server{
-		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HttpPort),
+		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HTTPPort),
 		Handler:        router,
 		ReadTimeout:    setting.ServerSetting.ReadTimeout,
 		WriteTimeout:   setting.ServerSetting.WriteTimeout,

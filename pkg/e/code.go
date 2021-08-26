@@ -1,6 +1,6 @@
 package e
 
-//反馈代码
+// 反馈代码
 const (
 	SUCCESS         = 200
 	ERROR           = 500

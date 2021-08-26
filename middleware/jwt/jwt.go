@@ -1,12 +1,13 @@
 package jwt
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"time"
 )
 
 var jwtSecret = []byte(setting.AppSetting.JwtSecret)
@@ -54,7 +55,7 @@ func JWT() gin.HandlerFunc {
 	}
 }
 
-//生成token
+// GenerateToken 生成token
 func GenerateToken(username, password string) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(3 * time.Hour)
@@ -74,7 +75,7 @@ func GenerateToken(username, password string) (string, error) {
 	return token, err
 }
 
-//解析token
+// ParseToken 解析token
 func ParseToken(token string) (*Claims, error) {
 	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil

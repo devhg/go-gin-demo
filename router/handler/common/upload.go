@@ -1,12 +1,14 @@
 package common
 
 import (
+	"net/http"
+	"os"
+
+	"github.com/gin-gonic/gin"
+
 	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/devhg/go-gin-demo/pkg/logging"
 	"github.com/devhg/go-gin-demo/pkg/upload"
-	"github.com/gin-gonic/gin"
-	"net/http"
-	"os"
 )
 
 func UploadImages(c *gin.Context) {
@@ -45,11 +47,10 @@ func UploadImages(c *gin.Context) {
 				logging.Warn(err)
 				code = e.ERROR_UPLOAD_SAVE_IMAGE_FAIL
 			} else {
-				data["image_url"] = upload.GetImageFullUrl(imageName)
+				data["image_url"] = upload.GetImageFullURL(imageName)
 				data["image_save_url"] = savePath + imageName
 			}
 		}
-
 	}
 
 	c.JSON(http.StatusOK, gin.H{

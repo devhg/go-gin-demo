@@ -4,9 +4,9 @@ import "github.com/devhg/go-gin-demo/pkg/setting"
 
 const EXT = ".xlsx"
 
-// GetExcelFullUrl get the full access path of the Excel file
-func GetExcelFullUrl(name string) string {
-	return setting.AppSetting.PrefixUrl + "/" + GetExcelPath() + name
+// GetExcelFullURL get the full access path of the Excel file
+func GetExcelFullURL(name string) string {
+	return setting.AppSetting.PrefixURL + "/" + GetExcelPath() + name
 }
 
 // GetExcelPath get the relative save path of the Excel file

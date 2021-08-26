@@ -9,38 +9,37 @@ import (
 	"io"
 )
 
-//高级加密标准（Adevanced Encryption Standard ,AES）
+// 高级加密标准（Adevanced Encryption Standard ,AES）
 
-//16,24,32位字符串的话，分别对应AES-128，AES-192，AES-256 加密方法
-//key不能泄露
+// PwdKey 16,24,32位字符串的话，分别对应AES-128，AES-192，AES-256 加密方法. key不能泄露
 var PwdKey = []byte("abcdefgabcdefg12")
 
-//func main() {
-//	origData := []byte("Hello World") // 待加密的数据
-//	key := []byte("ABCDEFGHIJKLMNOP") // 加密的密钥
-//	log.Println("原文：", string(origData))
-//
-//	log.Println("------------------ CBC模式 --------------------")
-//	encrypted := AesEncryptCBC(origData, key)
-//	log.Println("密文(hex)：", hex.EncodeToString(encrypted))
-//	log.Println("密文(base64)：", base64.StdEncoding.EncodeToString(encrypted))
-//	decrypted := AesDecryptCBC(encrypted, key)
-//	log.Println("解密结果：", string(decrypted))
-//
-//	log.Println("------------------ ECB模式 --------------------")
-//	encrypted = AesEncryptECB(origData, key)
-//	log.Println("密文(hex)：", hex.EncodeToString(encrypted))
-//	log.Println("密文(base64)：", base64.StdEncoding.EncodeToString(encrypted))
-//	decrypted = AesDecryptECB(encrypted, key)
-//	log.Println("解密结果：", string(decrypted))
-//
-//	log.Println("------------------ CFB模式 --------------------")
-//	encrypted = AesEncryptCFB(origData, key)
-//	log.Println("密文(hex)：", hex.EncodeToString(encrypted))
-//	log.Println("密文(base64)：", base64.StdEncoding.EncodeToString(encrypted))
-//	decrypted = AesDecryptCFB(encrypted, key)
-//	log.Println("解密结果：", string(decrypted))
-//}
+// func main() {
+// 	origData := []byte("Hello World") // 待加密的数据
+// 	key := []byte("ABCDEFGHIJKLMNOP") // 加密的密钥
+// 	log.Println("原文：", string(origData))
+
+// 	log.Println("------------------ CBC模式 --------------------")
+// 	encrypted := AesEncryptCBC(origData, key)
+// 	log.Println("密文(hex)：", hex.EncodeToString(encrypted))
+// 	log.Println("密文(base64)：", base64.StdEncoding.EncodeToString(encrypted))
+// 	decrypted := AesDecryptCBC(encrypted, key)
+// 	log.Println("解密结果：", string(decrypted))
+
+// 	log.Println("------------------ ECB模式 --------------------")
+// 	encrypted = AesEncryptECB(origData, key)
+// 	log.Println("密文(hex)：", hex.EncodeToString(encrypted))
+// 	log.Println("密文(base64)：", base64.StdEncoding.EncodeToString(encrypted))
+// 	decrypted = AesDecryptECB(encrypted, key)
+// 	log.Println("解密结果：", string(decrypted))
+
+// 	log.Println("------------------ CFB模式 --------------------")
+// 	encrypted = AesEncryptCFB(origData, key)
+// 	log.Println("密文(hex)：", hex.EncodeToString(encrypted))
+// 	log.Println("密文(base64)：", base64.StdEncoding.EncodeToString(encrypted))
+// 	decrypted = AesDecryptCFB(encrypted, key)
+// 	log.Println("解密结果：", string(decrypted))
+// }
 
 // =================== CBC ======================
 func AesEncryptCBC(origData []byte, key []byte) (encrypted []byte) {
@@ -92,6 +91,7 @@ func AesEncryptECB(origData []byte, key []byte) (encrypted []byte) {
 
 	return encrypted
 }
+
 func AesDecryptECB(encrypted []byte, key []byte) (decrypted []byte) {
 	cipher, _ := aes.NewCipher(generateKey(key))
 	decrypted = make([]byte, len(encrypted))
@@ -107,6 +107,7 @@ func AesDecryptECB(encrypted []byte, key []byte) (decrypted []byte) {
 
 	return decrypted[:trim]
 }
+
 func generateKey(key []byte) (genKey []byte) {
 	genKey = make([]byte, 16)
 	copy(genKey, key)
@@ -133,6 +134,7 @@ func AesEncryptCFB(origData []byte, key []byte) (encrypted []byte) {
 	stream.XORKeyStream(encrypted[aes.BlockSize:], origData)
 	return encrypted
 }
+
 func AesDecryptCFB(encrypted []byte, key []byte) (decrypted []byte) {
 	block, _ := aes.NewCipher(key)
 	if len(encrypted) < aes.BlockSize {
@@ -146,7 +148,7 @@ func AesDecryptCFB(encrypted []byte, key []byte) (decrypted []byte) {
 	return encrypted
 }
 
-//加密base64
+// 加密base64
 func EnPwdCode(encrypted []byte) string {
 	return base64.StdEncoding.EncodeToString(encrypted)
 }

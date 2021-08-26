@@ -2,7 +2,7 @@ package contest
 
 import "github.com/gin-gonic/gin"
 
-func ContestRegister(route *gin.RouterGroup) {
+func Register(route *gin.RouterGroup) {
 	contest := route.Group("/contest")
 	{
 		contest.GET("/", nil)

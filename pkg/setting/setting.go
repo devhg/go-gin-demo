@@ -2,9 +2,10 @@ package setting
 
 import (
 	"fmt"
-	"github.com/go-ini/ini"
 	"log"
 	"time"
+
+	"github.com/go-ini/ini"
 )
 
 type App struct {
@@ -15,7 +16,7 @@ type App struct {
 
 	RuntimeRootPath string
 
-	ImagePrefixUrl string
+	ImagePrefixURL string
 	ImageSavePath  string
 	ImageMaxSize   int
 	ImageAllowExts []string
@@ -26,7 +27,7 @@ type App struct {
 	TimeFormat  string
 
 	QrCodeSavePath string
-	PrefixUrl      string
+	PrefixURL      string
 
 	ExportSavePath string
 }
@@ -35,7 +36,7 @@ var AppSetting = &App{}
 
 type Server struct {
 	RunMode      string
-	HttpPort     int
+	HTTPPort     int
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 }
@@ -47,7 +48,7 @@ type Database struct {
 	Username string
 	Password string
 	Host     string
-	DbName   string
+	DBName   string
 }
 
 var DatabaseSetting = &Database{}
@@ -77,31 +78,31 @@ func Setup() {
 	loadDataBase()
 }
 
-//加载服务器ip端口相关配置
+// 加载服务器ip端口相关配置
 func loadServer() {
 	err := Cfg.Section("server").MapTo(ServerSetting)
 	if err != nil {
-		log.Fatal("Cfg.MapTo ServerSetting err: %v", err)
+		log.Fatalf("cfg.MapTo ServerSetting err: %v", err)
 	}
-	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
-	ServerSetting.WriteTimeout = ServerSetting.ReadTimeout * time.Second
+	ServerSetting.ReadTimeout *= time.Second
+	ServerSetting.WriteTimeout *= time.Second
 }
 
-//加载数据库相关配置
+// 加载数据库相关配置
 func loadDataBase() {
 	err := Cfg.Section("database").MapTo(DatabaseSetting)
 	if err != nil {
-		log.Fatal("Cfg.MapTo DatabaseSetting err: %v", err)
+		log.Fatalf("cfg.MapTo DatabaseSetting err: %v", err)
 	}
 
 	fmt.Println(DatabaseSetting)
 }
 
-//加载其他配置
+// 加载其他配置
 func loadApp() {
 	err := Cfg.Section("app").MapTo(AppSetting)
 	if err != nil {
-		log.Fatal("Cfg.MapTo AppSetting err: %v", err)
+		log.Fatalf("cfg.MapTo AppSetting err: %v", err)
 	}
 	AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 }

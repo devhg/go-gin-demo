@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/gob"
 	"encoding/json"
-	"github.com/devhg/go-gin-demo/pkg/setting"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
+
+	"github.com/devhg/go-gin-demo/pkg/setting"
 )
 
 var RedisConn *redis.Pool
@@ -49,8 +50,11 @@ func Set(key string, data interface{}, time int) (string, error) {
 	}
 
 	reply, err := redis.String(conn.Do("SET", key, value))
-	conn.Do("EXPIRE", key, time)
+	if err != nil {
+		return reply, err
+	}
 
+	_, _ = conn.Do("EXPIRE", key, time)
 	return reply, err
 }
 
@@ -105,8 +109,8 @@ func LikeDeletes(key string) error {
 }
 
 // Hash store
-//利用redis库自带的Args 和 AddFlat对结构体进行转换。然后以hash类型存储。
-//该方式实现简单，但存在最大的问题是不支持数组结构（如：结构体中内嵌结构体、数组等）。
+// 利用redis库自带的Args 和 AddFlat对结构体进行转换。然后以hash类型存储。
+// 该方式实现简单，但存在最大的问题是不支持数组结构（如：结构体中内嵌结构体、数组等）。
 func DoHashStore(key string, src interface{}) (string, error) {
 	conn := RedisConn.Get()
 	defer conn.Close()
@@ -150,7 +154,7 @@ func DoGobGet(key string, dest interface{}) error {
 }
 
 // JSON Encoding
-func DoJsonStore(key string, src interface{}) (string, error) {
+func DoJSONStore(key string, src interface{}) (string, error) {
 	conn := RedisConn.Get()
 	defer conn.Close()
 
@@ -161,7 +165,7 @@ func DoJsonStore(key string, src interface{}) (string, error) {
 	return redis.String(conn.Do("set", key, datas))
 }
 
-func DoJsonGet(key string, dest interface{}) error {
+func DoJSONGet(key string, dest interface{}) error {
 	conn := RedisConn.Get()
 	defer conn.Close()
 

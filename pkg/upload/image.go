@@ -2,18 +2,19 @@ package upload
 
 import (
 	"fmt"
+	"mime/multipart"
+	"os"
+	"strings"
+
 	"github.com/devhg/go-gin-demo/pkg/file"
 	"github.com/devhg/go-gin-demo/pkg/logging"
 	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/devhg/go-gin-demo/pkg/util"
-	"mime/multipart"
-	"os"
-	"strings"
 )
 
 // GetImageFullUrl get the full access path
-func GetImageFullUrl(name string) string {
-	return setting.AppSetting.ImagePrefixUrl + "/" + GetImagePath() + name
+func GetImageFullURL(name string) string {
+	return setting.AppSetting.ImagePrefixURL + "/" + GetImagePath() + name
 }
 
 // GetImageName get image name
@@ -22,7 +23,7 @@ func GetImageName(name string) string {
 	fileName := strings.TrimSuffix(name, ext)
 	fileName = util.EncodeMD5(fileName)
 
-	return fileName + ext //MD5(name-ext)+ext
+	return fileName + ext // MD5(name-ext)+ext
 }
 
 // GetImagePath get save path
@@ -39,7 +40,7 @@ func GetImageFullPath() string {
 func CheckImageExt(fileName string) bool {
 	ext := file.GetExt(fileName)
 	for _, allowExt := range setting.AppSetting.ImageAllowExts {
-		if strings.ToUpper(allowExt) == strings.ToUpper(ext) {
+		if strings.EqualFold(allowExt, ext) {
 			return true
 		}
 	}
@@ -71,7 +72,7 @@ func CheckImagePath(src string) error {
 	}
 
 	perm := file.CheckPermission(src)
-	if perm == true {
+	if perm {
 		return fmt.Errorf("file.CheckPermission Permission denied src: %s", src)
 	}
 

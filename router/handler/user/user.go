@@ -5,42 +5,43 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+
+	// validation
 	_ "github.com/astaxie/beego/validation"
+	"github.com/gin-gonic/gin"
+
 	"github.com/devhg/go-gin-demo/middleware/crypto"
-	"github.com/devhg/go-gin-demo/model"
+	"github.com/devhg/go-gin-demo/model/dao"
+	"github.com/devhg/go-gin-demo/model/service/user"
 	"github.com/devhg/go-gin-demo/pkg/app"
 	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/devhg/go-gin-demo/pkg/logging"
 	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/devhg/go-gin-demo/pkg/util"
 	"github.com/devhg/go-gin-demo/router/handler/common"
-	"github.com/devhg/go-gin-demo/service/user"
-	"github.com/gin-gonic/gin"
-	_ "github.com/unknwon/com"
-	"log"
-	_ "log"
-	"net/http"
 )
 
-func UserRegister(route *gin.RouterGroup) {
+func Register(route *gin.RouterGroup) {
 	userRoute := route.Group("user")
 	{
 		userRoute.POST("/login", common.GetAuth)
-		userRoute.POST("/register", Register)
+		userRoute.POST("/register", Registe)
 		userRoute.POST("/feedback", AddFeedback)
 		userRoute.POST("/updatePwd", UpdatePwd)
 
-		userRoute.GET("/info/:uid", GetUserinfoByUid)
+		userRoute.GET("/info/:uid", GetUserinfoByUID)
 		userRoute.GET("/stat/:uid", GetTrainStat)
 		userRoute.GET("/standing", GetUserinfos)
 		userRoute.GET("/notice", GetNotices)
 	}
 }
 
-//类似spring的 servie注入
-//var (
-//	uss user.FeedbackService
-//)
+// 类似spring的 servie注入
+// var (
+// 	uss user.FeedbackService
+// )
 
 func GetUserinfos(c *gin.Context) {
 	appG := app.Gin{C: c}
@@ -55,7 +56,8 @@ func GetUserinfos(c *gin.Context) {
 	if export, exist := c.GetQuery("export"); exist && export == "true" {
 		query["export"] = export
 	}
-	//valid := validation.Validation{}
+
+	// valid := validation.Validation{}
 	us := user.Userinfo{
 		PageNum:  util.GetPageOffset(c),
 		PageSize: setting.AppSetting.PageSize,
@@ -77,7 +79,7 @@ func GetUserinfos(c *gin.Context) {
 		"pageInfo": infos,
 		"total":    total,
 	}
-	//历史遗留问题
+	// 历史遗留问题
 	if _, ok := query["export"]; ok {
 		appG.Response(http.StatusOK, e.SUCCESS, infos)
 		return
@@ -85,15 +87,15 @@ func GetUserinfos(c *gin.Context) {
 	appG.Response(http.StatusOK, e.SUCCESS, resp)
 }
 
-func GetUserinfoByUid(c *gin.Context) {
+func GetUserinfoByUID(c *gin.Context) {
 	appG := app.Gin{C: c}
 	uid := c.Param("uid")
 
 	us := user.Userinfo{
-		Uid: uid,
+		UID: uid,
 	}
 
-	info, err := us.GetInfoByUid()
+	info, err := us.GetInfoByUID()
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
 		return
@@ -131,12 +133,12 @@ func AddFeedback(c *gin.Context) {
 func GetNotices(c *gin.Context) {
 	appG := app.Gin{C: c}
 
-	if notices, err := model.GetAllNotices(); err != nil {
+	if notices, err := dao.GetAllNotices(); err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
 	} else {
 		marshal, _ := json.Marshal(&notices)
 		fmt.Println(string(marshal))
-		//bytes := []byte(notices)
+		// bytes := []byte(notices)
 		fmt.Println(setting.AppSetting.AesSecret)
 		encrypted := crypto.AesEncryptECB(marshal, []byte(setting.AppSetting.AesSecret))
 		log.Println("密文(hex)：", hex.EncodeToString(encrypted))
@@ -152,7 +154,7 @@ func GetTrainStat(c *gin.Context) {
 
 }
 
-func Register(c *gin.Context) {
+func Registe(c *gin.Context) {
 
 }
 

@@ -1,6 +1,15 @@
 package router
 
 import (
+	"html/template"
+	"net/http"
+
+	"github.com/foolin/goview"
+	"github.com/foolin/goview/supports/ginview"
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/devhg/go-gin-demo/middleware/cors"
 	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/devhg/go-gin-demo/pkg/upload"
@@ -8,13 +17,6 @@ import (
 	"github.com/devhg/go-gin-demo/router/handler/contest"
 	"github.com/devhg/go-gin-demo/router/handler/train"
 	"github.com/devhg/go-gin-demo/router/handler/user"
-	"github.com/foolin/goview"
-	"github.com/foolin/goview/supports/ginview"
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	"html/template"
-	"net/http"
 )
 
 func InitRouter() *gin.Engine {
@@ -37,7 +39,7 @@ func InitRouter() *gin.Engine {
 		Delims:       goview.Delims{Left: "{{", Right: "}}"},
 	})
 	r.GET("/", func(ctx *gin.Context) {
-		//render with master
+		// render with master
 		ctx.HTML(http.StatusOK, "index", gin.H{
 			"title": "Index title!",
 			"add": func(a int, b int) int {
@@ -47,7 +49,6 @@ func InitRouter() *gin.Engine {
 	})
 
 	r.GET("/page", func(ctx *gin.Context) {
-
 		ctx.HTML(http.StatusOK, "page.html", gin.H{
 			"title": "Page file title!!",
 		})
@@ -56,21 +57,23 @@ func InitRouter() *gin.Engine {
 	// 整合swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	//r.StaticFile("/", "./views/exam/master.html")
-	//r.Static("/exam", "./views/exam")
+	// r.StaticFile("/", "./views/exam/master.html")
+	// r.Static("/exam", "./views/exam")
 
-	//文件系统
+	// 文件系统
 	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
+
 	// 文件上传
 	r.POST("/upload", common.UploadImages)
-	//二维码制作
+
+	// 二维码制作
 	r.POST("/qrcode/generate", common.GenerateArticlePoster)
 
-	//接口注册
+	// 接口注册
 	api := r.Group("/api/v1")
-	contest.ContestRegister(api)
-	train.TrainRegister(api)
-	user.UserRegister(api)
+	contest.Register(api)
+	train.Register(api)
+	user.Register(api)
 
 	return r
 }
