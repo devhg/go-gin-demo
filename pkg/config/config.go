@@ -34,6 +34,14 @@ type ServerConfig struct {
 	WriteTimeout time.Duration
 }
 
+type MailConfig struct {
+	Host     string
+	Port     int
+	UserName string
+	PassWord string
+	To       []string
+}
+
 type AppConfig struct {
 	// config for http server
 	Server ServerConfig
@@ -66,6 +74,8 @@ type AppConfig struct {
 		LogFileExt  string
 		TimeFormat  string
 	}
+
+	Mail *MailConfig
 }
 
 var AppSetting = &AppConfig{}

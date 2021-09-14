@@ -12,7 +12,6 @@ type Feedback struct {
 
 // AddFeedback 用户反馈
 func AddFeedback(feedback Feedback) error {
-
 	if err := Db.GetDBR().Create(&feedback).Error; err != nil {
 		return err
 	}

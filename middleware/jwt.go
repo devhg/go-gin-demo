@@ -16,9 +16,9 @@ var appSetting = config.AppSetting.App
 var jwtSecret = []byte(appSetting.JwtSecret)
 
 type Claims struct {
+	jwt.StandardClaims
 	Username string `json:"username"`
 	Password string `json:"password"`
-	jwt.StandardClaims
 }
 
 // JWT is jwt middleware
@@ -64,12 +64,12 @@ func GenerateToken(username, password string) (string, error) {
 	expireTime := nowTime.Add(3 * time.Hour)
 
 	claims := Claims{
-		username,
-		password,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "gin-blog",
 		},
+		username,
+		password,
 	}
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

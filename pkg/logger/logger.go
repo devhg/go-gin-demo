@@ -3,9 +3,11 @@ package logger
 import (
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"time"
 
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -25,7 +27,8 @@ type Option func(*option)
 type option struct {
 	level          zapcore.Level
 	fields         map[string]string
-	file           io.Writer
+	infoFile       io.Writer
+	warnFile       io.Writer
 	timeLayout     string
 	disableConsole bool
 }
@@ -65,24 +68,34 @@ func WithField(key, value string) Option {
 	}
 }
 
-// WithFileP write log to some file
-func WithFileP(file string) Option {
-	dir := filepath.Dir(file)
-	if err := os.MkdirAll(dir, 0766); err != nil {
-		panic(err)
-	}
-
-	f, err := os.OpenFile(file, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0766)
-	if err != nil {
-		panic(err)
-	}
-
+// WithFileRotation write log to some file
+func WithFileRotation(logPath, logPrefix string) Option {
 	return func(opt *option) {
-		opt.file = zapcore.Lock(f)
+		// 获取 info、warn日志文件的io.Writer 抽象 getWriter() 在下方实现
+		opt.infoFile = getWriter(path.Join(logPath, logPrefix+".info"))
+		opt.warnFile = getWriter(path.Join(logPath, logPrefix+".error"))
 	}
 }
 
+func getWriter(filename string) io.Writer {
+	// 生成rotatelogs的Logger 实际生成的文件名 demo.log.YYmmddHH
+	// demo.log是指向最新日志的链接
+	// 保存7天内的日志，每1小时(整点)分割一次日志
+	w, err := rotatelogs.New(
+		filename+".%Y%m%d%H.log", // 没有使用go风格反人类的format格式
+		rotatelogs.WithLinkName(filename),
+		rotatelogs.WithMaxAge(time.Hour*24*7),
+		rotatelogs.WithRotationTime(time.Hour),
+	)
+
+	if err != nil {
+		panic(err)
+	}
+	return w
+}
+
 // WithFileRotationP write log to some file with rotation
+// out-of-date
 func WithFileRotationP(file string) Option {
 	dir := filepath.Dir(file)
 	if err := os.MkdirAll(dir, 0766); err != nil {
@@ -90,7 +103,7 @@ func WithFileRotationP(file string) Option {
 	}
 
 	return func(opt *option) {
-		opt.file = &lumberjack.Logger{ // concurrent-safed
+		opt.infoFile = &lumberjack.Logger{ // concurrent-safed
 			Filename:   file, // 文件路径
 			MaxSize:    128,  // 单个文件最大尺寸，默认单位 M
 			MaxBackups: 300,  // 最多保留 300 个备份
@@ -146,47 +159,45 @@ func NewJSONLogger(opts ...Option) (*zap.Logger, error) {
 
 	jsonEncoder := zapcore.NewJSONEncoder(encoderConfig)
 
-	// lowPriority usd by info\debug\warn
+	// lowPriority usd by info/debug/warn
 	lowPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
 		return lvl >= opt.level && lvl < zapcore.ErrorLevel
 	})
 
-	// highPriority usd by error\panic\fatal
+	// highPriority usd by error/panic/fatal
 	highPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
 		return lvl >= opt.level && lvl >= zapcore.ErrorLevel
 	})
 
-	stdout := zapcore.Lock(os.Stdout) // lock for concurrent safe
-	stderr := zapcore.Lock(os.Stderr) // lock for concurrent safe
+	stdout := zapcore.Lock(zapcore.AddSync(opt.infoFile)) // lock for concurrent safe
+	stderr := zapcore.Lock(zapcore.AddSync(opt.warnFile)) // lock for concurrent safe
 
-	core := zapcore.NewTee()
+	core := zapcore.NewTee(
+		zapcore.NewCore(jsonEncoder,
+			zapcore.NewMultiWriteSyncer(stdout),
+			lowPriority,
+		),
+		zapcore.NewCore(jsonEncoder,
+			zapcore.NewMultiWriteSyncer(stderr),
+			highPriority,
+		),
+	)
 
-	if !opt.disableConsole {
-		core = zapcore.NewTee(
-			zapcore.NewCore(jsonEncoder,
-				zapcore.NewMultiWriteSyncer(stdout),
-				lowPriority,
-			),
-			zapcore.NewCore(jsonEncoder,
-				zapcore.NewMultiWriteSyncer(stderr),
-				highPriority,
-			),
-		)
-	}
-
-	if opt.file != nil {
-		core = zapcore.NewTee(core,
-			zapcore.NewCore(jsonEncoder,
-				zapcore.AddSync(opt.file),
-				zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-					return lvl >= opt.level
-				}),
-			),
-		)
-	}
+	// out-of-date
+	// if opt.file != nil {
+	// 	core = zapcore.NewTee(core,
+	// 		zapcore.NewCore(jsonEncoder,
+	// 			zapcore.AddSync(opt.file),
+	// 			zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+	// 				return lvl >= opt.level
+	// 			}),
+	// 		),
+	// 	)
+	// }
 
 	logger := zap.New(core,
 		zap.AddCaller(),
+		zap.AddStacktrace(zap.PanicLevel),
 		zap.ErrorOutput(stderr),
 	)
 

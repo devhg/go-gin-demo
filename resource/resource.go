@@ -11,7 +11,3 @@ var Logger *zap.Logger
 var CronLogger *zap.Logger
 
 var MysqlRepo mysqlc.Repo
-
-func init() {
-
-}

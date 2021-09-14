@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"path"
 	"time"
 
 	"go.uber.org/zap"
@@ -27,35 +28,50 @@ func InitHTTPServer() *http.Server {
 	resource.CronLogger = cronLogger
 
 	// 初始化DB
-	initDBServer(accessLogger)
+	// initDBServer(accessLogger)
 
 	// 初始化Web Server
 	return initHTTPServer()
 }
 
 func initLogger() {
+	logPath := path.Join(
+		config.AppSetting.App.RuntimeRootPath,
+		config.AppSetting.Log.LogSavePath)
+
 	// 初始化 access logger
 	var err error
 	accessLogger, err = logger.NewJSONLogger(
 		logger.WithDisableConsole(),
 		logger.WithField("domain", fmt.Sprintf("%s[%s]", "configs.ProjectName", "env.Active().Value()")),
 		logger.WithTimeLayout("2006-01-02 15:04:05"),
-		logger.WithFileP(config.AppSetting.Log.LogSaveName),
+		logger.WithFileRotation(logPath, "access"),
 	)
 	if err != nil {
 		panic(err)
 	}
 
+	// accessLogger.Info("info", zap.Any("devhg", 123))
+	// accessLogger.Debug("debug", zap.Any("A", "b"))
+	// accessLogger.Warn("warn", zap.Error(errors.New("i am error")))
+
+	// accessLogger.Error("error", zap.Error(errors.New("err")))
+	// accessLogger.Panic("panic", zap.Time("ss", time.Now())) // show stacktrace
+	// accessLogger.Fatal("fatal", zap.Bools("a", []bool{false, true}))
+
 	// 初始化 cron logger
+	cronPath := path.Join(logPath, "cron")
 	cronLogger, err = logger.NewJSONLogger(
 		logger.WithDisableConsole(),
 		logger.WithField("domain", fmt.Sprintf("%s[%s]", "configs.ProjectName", "env.Active().Value()")),
 		logger.WithTimeLayout("2006-01-02 15:04:05"),
-		logger.WithFileP(config.AppSetting.Log.LogSaveName+"cron"),
+		logger.WithFileRotation(cronPath, "cron"),
 	)
 	if err != nil {
 		panic(err)
 	}
+
+	// cronLogger.Info("cron logger")
 }
 
 func initDBServer(logger *zap.Logger) {

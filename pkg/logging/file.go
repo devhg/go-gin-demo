@@ -25,9 +25,9 @@ func getLogFilePath() string {
 
 // 获取log的全名
 func getLogFileName() string {
-	return fmt.Sprintf("%s%s.%s",
+	return fmt.Sprintf("%s-%s.%s",
 		config.AppSetting.Log.LogSaveName,
-		time.Now().Format(config.AppSetting.App.TimeFormat),
+		time.Now().Format("2006010215"),
 		config.AppSetting.Log.LogFileExt,
 	)
 }
