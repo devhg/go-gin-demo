@@ -6,15 +6,15 @@ import (
 	"os"
 	"strings"
 
+	"github.com/devhg/go-gin-demo/pkg/config"
 	"github.com/devhg/go-gin-demo/pkg/file"
 	"github.com/devhg/go-gin-demo/pkg/logging"
-	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/devhg/go-gin-demo/pkg/util"
 )
 
 // GetImageFullUrl get the full access path
 func GetImageFullURL(name string) string {
-	return setting.AppSetting.ImagePrefixURL + "/" + GetImagePath() + name
+	return config.AppSetting.App.ImagePrefixURL + "/" + GetImagePath() + name
 }
 
 // GetImageName get image name
@@ -28,18 +28,18 @@ func GetImageName(name string) string {
 
 // GetImagePath get save path
 func GetImagePath() string {
-	return setting.AppSetting.ImageSavePath
+	return config.AppSetting.App.ImageSavePath
 }
 
 // GetImageFullPath get full save path
 func GetImageFullPath() string {
-	return setting.AppSetting.RuntimeRootPath + GetImagePath()
+	return config.AppSetting.App.RuntimeRootPath + GetImagePath()
 }
 
 // CheckImageExt check image file ext
 func CheckImageExt(fileName string) bool {
 	ext := file.GetExt(fileName)
-	for _, allowExt := range setting.AppSetting.ImageAllowExts {
+	for _, allowExt := range config.AppSetting.App.ImageAllowExts {
 		if strings.EqualFold(allowExt, ext) {
 			return true
 		}
@@ -56,7 +56,7 @@ func CheckImageSize(f multipart.File) bool {
 		return false
 	}
 
-	return size <= setting.AppSetting.ImageMaxSize
+	return size <= config.AppSetting.App.ImageMaxSize
 }
 
 // CheckImage check if the file folder exists

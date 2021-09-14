@@ -1,0 +1,4 @@
+Name = "etcd"
+Retries = 3
+SmartDNS = "group.etcd.www.cn" # 可以用于负载均衡的key
+Timeout = 500

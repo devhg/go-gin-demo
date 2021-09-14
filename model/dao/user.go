@@ -7,7 +7,7 @@ type User struct {
 
 func CheckAuth(username, password string) (bool, error) {
 	var user User
-	err := db.Where("username=? AND password=?", username, password).First(&user).Error
+	err := Db.GetDBR().Where("username=? AND password=?", username, password).First(&user).Error
 	if err != nil {
 		return false, err
 	}

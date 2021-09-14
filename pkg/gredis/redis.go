@@ -8,23 +8,26 @@ import (
 
 	"github.com/gomodule/redigo/redis"
 
-	"github.com/devhg/go-gin-demo/pkg/setting"
+	"github.com/devhg/go-gin-demo/pkg/config"
 )
 
 var RedisConn *redis.Pool
 
-func Setup() error {
+func New(serviceName string) error {
+	servicer := config.GetServicer(serviceName)
+	redisConf := servicer.(*config.Redis)
+
 	RedisConn = &redis.Pool{
-		MaxIdle:     setting.RedisSetting.MaxIdle,
-		MaxActive:   setting.RedisSetting.MaxActive,
-		IdleTimeout: setting.RedisSetting.IdleTimeout,
+		MaxIdle:     redisConf.Config.MaxIdle,
+		MaxActive:   redisConf.Config.MaxActive,
+		IdleTimeout: time.Duration(redisConf.Config.IdleTimeout),
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", setting.RedisSetting.Host)
+			c, err := redis.Dial("tcp", redisConf.Config.Host)
 			if err != nil {
 				return nil, err
 			}
-			if setting.RedisSetting.Password != "" {
-				if _, err := c.Do("AUTH", setting.RedisSetting.Password); err != nil {
+			if redisConf.Config.Password != "" {
+				if _, err := c.Do("AUTH", redisConf.Config.Password); err != nil {
 					c.Close()
 					return nil, err
 				}

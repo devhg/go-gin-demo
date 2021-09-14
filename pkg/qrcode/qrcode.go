@@ -6,8 +6,8 @@ import (
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
 
+	"github.com/devhg/go-gin-demo/pkg/config"
 	"github.com/devhg/go-gin-demo/pkg/file"
-	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/devhg/go-gin-demo/pkg/util"
 )
 
@@ -37,15 +37,15 @@ func NewQrCode(url string, width, height int, level qr.ErrorCorrectionLevel,
 }
 
 func GetQrCodePath() string {
-	return setting.AppSetting.QrCodeSavePath
+	return config.AppSetting.App.QrCodeSavePath
 }
 
 func GetQrCodeFullPath() string {
-	return setting.AppSetting.RuntimeRootPath + setting.AppSetting.QrCodeSavePath
+	return config.AppSetting.App.RuntimeRootPath + config.AppSetting.App.QrCodeSavePath
 }
 
 func GetQrCodeFullURL(name string) string {
-	return setting.AppSetting.PrefixURL + "/" + GetQrCodePath() + name
+	return config.AppSetting.App.PrefixURL + "/" + GetQrCodePath() + name
 }
 
 func GetQrCodeFileName(value string) string {

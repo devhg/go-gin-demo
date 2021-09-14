@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/devhg/go-gin-demo/pkg/config"
 	"github.com/devhg/go-gin-demo/pkg/file"
-	"github.com/devhg/go-gin-demo/pkg/setting"
 )
 
 var (
@@ -19,16 +19,16 @@ var (
 
 // 获取日志的路径名
 func getLogFilePath() string {
-	return fmt.Sprintf("%s%s", setting.AppSetting.RuntimeRootPath,
-		setting.AppSetting.LogSavePath)
+	return fmt.Sprintf("%s%s", config.AppSetting.App.RuntimeRootPath,
+		config.AppSetting.Log.LogSavePath)
 }
 
 // 获取log的全名
 func getLogFileName() string {
 	return fmt.Sprintf("%s%s.%s",
-		setting.AppSetting.LogSaveName,
-		time.Now().Format(setting.AppSetting.TimeFormat),
-		setting.AppSetting.LogFileExt,
+		config.AppSetting.Log.LogSaveName,
+		time.Now().Format(config.AppSetting.App.TimeFormat),
+		config.AppSetting.Log.LogFileExt,
 	)
 }
 

@@ -1,16 +1,19 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
+	"flag"
 
+	"github.com/devhg/go-gin-demo/bootstrap"
 	_ "github.com/devhg/go-gin-demo/docs"
-	"github.com/devhg/go-gin-demo/model/dao"
+	"github.com/devhg/go-gin-demo/pkg/config"
 	"github.com/devhg/go-gin-demo/pkg/logging"
-	"github.com/devhg/go-gin-demo/pkg/setting"
-	"github.com/devhg/go-gin-demo/router"
 )
+
+var conf = flag.String("conf_path", "./config", "input config path")
+
+func init() {
+	flag.Parse()
+}
 
 // @title go-gin-demo
 // @version 1.0
@@ -22,26 +25,15 @@ import (
 // @host 127.0.0.1:8081
 // @BasePath
 func main() {
-	setting.Setup()
-	dao.Setup()
-	logging.Setup()
+	err := config.MustLoadConfig(*conf)
+	if err != nil {
+		panic(err)
+	}
 
+	logging.Setup()
 	logging.Info("Ready to start.")
 
-	router := router.InitRouter()
+	server := bootstrap.InitHTTPServer()
 
-	server := &http.Server{
-		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HTTPPort),
-		Handler:        router,
-		ReadTimeout:    setting.ServerSetting.ReadTimeout,
-		WriteTimeout:   setting.ServerSetting.WriteTimeout,
-		MaxHeaderBytes: 1 << 20,
-	}
-
-	logging.Info("Started in ", server.Addr)
-
-	err := server.ListenAndServe()
-	if err != nil {
-		log.Printf("Server error %v\n", err)
-	}
+	bootstrap.GracefulClose(server)
 }

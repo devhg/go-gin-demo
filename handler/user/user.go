@@ -8,19 +8,17 @@ import (
 	"log"
 	"net/http"
 
-	// validation
-	_ "github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 
+	"github.com/devhg/go-gin-demo/handler/common"
 	"github.com/devhg/go-gin-demo/middleware/crypto"
 	"github.com/devhg/go-gin-demo/model/dao"
 	"github.com/devhg/go-gin-demo/model/service/user"
 	"github.com/devhg/go-gin-demo/pkg/app"
+	"github.com/devhg/go-gin-demo/pkg/config"
 	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/devhg/go-gin-demo/pkg/logging"
-	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/devhg/go-gin-demo/pkg/util"
-	"github.com/devhg/go-gin-demo/router/handler/common"
 )
 
 func Register(route *gin.RouterGroup) {
@@ -37,11 +35,6 @@ func Register(route *gin.RouterGroup) {
 		userRoute.GET("/notice", GetNotices)
 	}
 }
-
-// 类似spring的 servie注入
-// var (
-// 	uss user.FeedbackService
-// )
 
 func GetUserinfos(c *gin.Context) {
 	appG := app.Gin{C: c}
@@ -60,7 +53,7 @@ func GetUserinfos(c *gin.Context) {
 	// valid := validation.Validation{}
 	us := user.Userinfo{
 		PageNum:  util.GetPageOffset(c),
-		PageSize: setting.AppSetting.PageSize,
+		PageSize: config.AppSetting.App.PageSize,
 		Query:    query,
 	}
 
@@ -69,7 +62,7 @@ func GetUserinfos(c *gin.Context) {
 		appG.Response(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
 		return
 	}
-	var total = 0
+	var total int64
 	total, err = us.InfoCount()
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
@@ -139,11 +132,12 @@ func GetNotices(c *gin.Context) {
 		marshal, _ := json.Marshal(&notices)
 		fmt.Println(string(marshal))
 		// bytes := []byte(notices)
-		fmt.Println(setting.AppSetting.AesSecret)
-		encrypted := crypto.AesEncryptECB(marshal, []byte(setting.AppSetting.AesSecret))
+		// fmt.Println(setting.AppSetting.AesSecret)
+		secret := config.AppSetting.App.AesSecret
+		encrypted := crypto.AesEncryptECB(marshal, []byte(secret))
 		log.Println("密文(hex)：", hex.EncodeToString(encrypted))
 		log.Println("密文(base64)：", base64.StdEncoding.EncodeToString(encrypted))
-		decrypted := crypto.AesDecryptECB(encrypted, []byte(setting.AppSetting.AesSecret))
+		decrypted := crypto.AesDecryptECB(encrypted, []byte(secret))
 		log.Println("解密结果：", string(decrypted))
 
 		appG.Response(http.StatusOK, e.SUCCESS, base64.StdEncoding.EncodeToString(encrypted))

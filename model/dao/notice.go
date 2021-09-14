@@ -14,7 +14,7 @@ type Notice struct {
 
 func GetAllNotices() ([]Notice, error) {
 	var notices []Notice
-	err := db.Find(&notices).Error
+	err := Db.GetDBR().Find(&notices).Error
 	if err != nil {
 		return nil, err
 	}

@@ -1,16 +1,19 @@
-package jwt
+package middleware
 
 import (
 	"net/http"
 	"time"
 
-	"github.com/devhg/go-gin-demo/pkg/e"
-	"github.com/devhg/go-gin-demo/pkg/setting"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+
+	"github.com/devhg/go-gin-demo/pkg/config"
+	"github.com/devhg/go-gin-demo/pkg/e"
 )
 
-var jwtSecret = []byte(setting.AppSetting.JwtSecret)
+var appSetting = config.AppSetting.App
+
+var jwtSecret = []byte(appSetting.JwtSecret)
 
 type Claims struct {
 	Username string `json:"username"`
@@ -25,7 +28,7 @@ func JWT() gin.HandlerFunc {
 		var data interface{}
 
 		code = e.SUCCESS
-		token := c.Query(setting.AppSetting.TokenHeader)
+		token := c.Query(appSetting.TokenHeader)
 		if token == "" {
 			code = e.INVALID_PARAMS
 		} else {

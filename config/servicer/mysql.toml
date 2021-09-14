@@ -1,0 +1,23 @@
+[service]
+Name = "mysql"
+Retries = 3
+SmartDNS = "group.mysql.www.cn" # 可以用于负载均衡的key
+Timeout = 500
+
+[read]
+Host = "127.0.0.1:3306"
+UserName = "root"
+Password = "root"
+DbName = "go_gin_api"
+MaxIdleConn = 60
+MaxOpenConn = 10
+MaxLifeTime = 10
+
+[write]
+Host = "127.0.0.1:3306"
+UserName = "root"
+Password = "root"
+DbName = "go_gin_api"
+MaxIdleConn = 60
+MaxOpenConn = 10
+MaxLifeTime = 10

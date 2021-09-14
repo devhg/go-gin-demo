@@ -29,7 +29,7 @@ func (i *Userinfo) GetInfoByUID() (*dao.Userinfo, error) {
 	return info, err
 }
 
-func (i *Userinfo) InfoCount() (int, error) {
+func (i *Userinfo) InfoCount() (int64, error) {
 	return dao.GetUserinfoTotal()
 }
 

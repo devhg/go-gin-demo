@@ -3,7 +3,7 @@ package dao
 import (
 	"fmt"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type Userinfo struct {
@@ -24,7 +24,7 @@ func GetUserInfos(pageNum int, pageSize int, query map[string]interface{}) ([]Us
 	)
 
 	// 这里需要注意一个细节,首先将全局的db变量赋值给了Db,如果用db直接进行操作,那一系列的赋值语句将会影响db的地址,影响后续的数据库操作.
-	DB := db
+	DB := Db.GetDBR()
 	if name, ok := query["name"]; ok {
 		DB = DB.Where("name LIKE ? ", fmt.Sprint("%", name, "%"))
 	}
@@ -50,7 +50,7 @@ func GetUserInfos(pageNum int, pageSize int, query map[string]interface{}) ([]Us
 // GetUserInfoByUID 通过用户uid获取单个用户信息
 func GetUserInfoByUID(uid string) (*Userinfo, error) {
 	var info Userinfo
-	err := db.Where("username = ?", uid).First(&info).Error
+	err := Db.GetDBR().Where("username = ?", uid).First(&info).Error
 
 	if err != nil {
 		return nil, err
@@ -59,9 +59,9 @@ func GetUserInfoByUID(uid string) (*Userinfo, error) {
 }
 
 // GetUserinfoTotal 统计用户个数
-func GetUserinfoTotal() (int, error) {
-	var count int
-	if err := db.Table("userinfo").Count(&count).Error; err != nil {
+func GetUserinfoTotal() (int64, error) {
+	var count int64
+	if err := Db.GetDBR().Table("userinfo").Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return count, nil

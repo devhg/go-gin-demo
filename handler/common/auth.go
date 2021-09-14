@@ -3,7 +3,7 @@ package common
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/devhg/go-gin-demo/middleware/jwt"
+	"github.com/devhg/go-gin-demo/middleware"
 	"github.com/devhg/go-gin-demo/model/dao"
 	"github.com/devhg/go-gin-demo/pkg/app"
 	"github.com/devhg/go-gin-demo/pkg/e"
@@ -31,7 +31,7 @@ func GetAuth(c *gin.Context) {
 	if eCode == 200 {
 		checkAuth, _ := dao.CheckAuth(auth.Username, auth.Password)
 		if checkAuth {
-			token, err := jwt.GenerateToken(auth.Username, auth.Password)
+			token, err := middleware.GenerateToken(auth.Username, auth.Password)
 			if err != nil {
 				code = e.ERROR_AUTH_TOKEN
 			} else {

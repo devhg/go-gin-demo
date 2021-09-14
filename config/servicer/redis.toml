@@ -1,0 +1,15 @@
+[service]
+Name = "redis"
+Retries = "3"
+SmartDNS = "group.redis.www.cn"
+Timeout = 500
+
+[config]
+Host = "127.0.0.1:6379"
+Password = ""
+Db = "0"
+MaxRetries = "3"
+MaxIdle = 1000
+MaxActive = 10
+IdleTimeout = 6000
+PoolSize = 10
