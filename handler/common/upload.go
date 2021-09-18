@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/devhg/go-gin-demo/pkg/e"
+	"github.com/devhg/go-gin-demo/common/e"
 	"github.com/devhg/go-gin-demo/pkg/logging"
 	"github.com/devhg/go-gin-demo/pkg/upload"
 )

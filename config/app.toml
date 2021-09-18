@@ -1,7 +1,7 @@
 [server]
-RunMode = "debug" #debug、test or release
+RunMode = "debug"  # debug、test or release
 HttpPort = "8081"
-ReadTimeout = 60
+ReadTimeout = 60 # 单位ns
 WriteTimeout = 60
 
 [app]

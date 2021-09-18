@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-
 	"github.com/devhg/go-gin-demo/bootstrap"
+
 	_ "github.com/devhg/go-gin-demo/docs"
 	"github.com/devhg/go-gin-demo/pkg/config"
 	"github.com/devhg/go-gin-demo/pkg/logging"
@@ -34,6 +34,18 @@ func main() {
 	logging.Info("Ready to start.")
 
 	server := bootstrap.InitHTTPServer()
+
+	// r := router.NewHTTPRouter()
+	//
+	// server := &http.Server{
+	// 	Addr:           fmt.Sprintf(":%s", config.AppSetting.Server.HTTPPort),
+	// 	Handler:        r,
+	// 	ReadTimeout:    config.AppSetting.Server.ReadTimeout * time.Second,
+	// 	WriteTimeout:   config.AppSetting.Server.WriteTimeout * time.Second,
+	// 	MaxHeaderBytes: 1 << 20,
+	// }
+	//
+	// log.Fatal(server.ListenAndServe())
 
 	bootstrap.GracefulClose(server)
 }

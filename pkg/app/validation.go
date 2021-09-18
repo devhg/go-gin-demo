@@ -9,7 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
 
-	"github.com/devhg/go-gin-demo/pkg/e"
+	"github.com/devhg/go-gin-demo/common/e"
 )
 
 /**

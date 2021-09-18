@@ -107,18 +107,20 @@ func initDBServer(logger *zap.Logger) {
 }
 
 func initHTTPServer() *http.Server {
-	router := router.NewHTTPRouter()
+	r := router.NewHTTPRouter()
 
 	server := &http.Server{
 		Addr:           fmt.Sprintf(":%s", config.AppSetting.Server.HTTPPort),
-		Handler:        router,
-		ReadTimeout:    config.AppSetting.Server.ReadTimeout,
-		WriteTimeout:   config.AppSetting.Server.WriteTimeout,
+		Handler:        r,
+		ReadTimeout:    config.AppSetting.Server.ReadTimeout * time.Millisecond,
+		WriteTimeout:   config.AppSetting.Server.WriteTimeout * time.Millisecond,
 		MaxHeaderBytes: 1 << 20,
 	}
 
+	accessLogger.Info(server.Addr)
+
 	go func() {
-		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := server.ListenAndServe(); err != nil /*&& err != http.ErrServerClosed*/ {
 			accessLogger.Fatal("http server startup err", zap.Error(err))
 		}
 	}()
@@ -126,7 +128,7 @@ func initHTTPServer() *http.Server {
 	return server
 }
 
-// GracefulClose
+// GracefulClose .
 func GracefulClose(server *http.Server) {
 	defer func() {
 		_ = resource.Logger.Sync()

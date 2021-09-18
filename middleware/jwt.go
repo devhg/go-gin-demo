@@ -7,8 +7,8 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
+	"github.com/devhg/go-gin-demo/common/e"
 	"github.com/devhg/go-gin-demo/pkg/config"
-	"github.com/devhg/go-gin-demo/pkg/e"
 )
 
 var appSetting = config.AppSetting.App

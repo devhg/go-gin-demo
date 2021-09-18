@@ -45,4 +45,11 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: Get Auth
+  /front/login:
+    post:
+      produces:
+      - application/json
+      summary: 用户登陆接口
+      tags:
+      - 登陆接口
 swagger: "2.0"

@@ -7,8 +7,8 @@ import (
 	"github.com/boombuler/barcode/qr"
 	"github.com/gin-gonic/gin"
 
+	"github.com/devhg/go-gin-demo/common/e"
 	"github.com/devhg/go-gin-demo/pkg/app"
-	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/devhg/go-gin-demo/pkg/qrcode"
 )
 
@@ -25,9 +25,9 @@ func GenerateArticlePoster(c *gin.Context) {
 	path := qrcode.GetQrCodeFullPath()
 	_, _, err := qrc.Encode(path)
 	if err != nil {
-		appG.Response(http.StatusOK, e.ERROR, nil)
+		appG.NewJSONResponse(http.StatusOK, e.ERROR, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK, e.SUCCESS, nil)
+	appG.NewJSONResponse(http.StatusOK, e.SUCCESS, nil)
 }

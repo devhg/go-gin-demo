@@ -3,10 +3,10 @@ package common
 import (
 	"github.com/gin-gonic/gin"
 
+	"github.com/devhg/go-gin-demo/common/e"
 	"github.com/devhg/go-gin-demo/middleware"
 	"github.com/devhg/go-gin-demo/model/dao"
 	"github.com/devhg/go-gin-demo/pkg/app"
-	"github.com/devhg/go-gin-demo/pkg/e"
 )
 
 type auth struct {
@@ -42,5 +42,5 @@ func GetAuth(c *gin.Context) {
 			code = e.ERROR_AUTH
 		}
 	}
-	appG.Response(httpStatus, code, data)
+	appG.NewJSONResponse(httpStatus, code, data)
 }

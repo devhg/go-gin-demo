@@ -3,7 +3,7 @@ package app
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/devhg/go-gin-demo/pkg/e"
+	"github.com/devhg/go-gin-demo/common/e"
 )
 
 type Gin struct {
@@ -17,7 +17,7 @@ type Response struct {
 }
 
 // Response setting gin.JSON
-func (g *Gin) Response(httpCode, errCode int, data interface{}) {
+func (g *Gin) NewJSONResponse(httpCode, errCode int, data interface{}) {
 	g.C.JSON(httpCode, Response{
 		Code: errCode,
 		Msg:  e.GetMsg(errCode),

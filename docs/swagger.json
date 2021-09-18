@@ -52,6 +52,17 @@
                     }
                 }
             }
+        },
+        "/front/login": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登陆接口"
+                ],
+                "summary": "用户登陆接口"
+            }
         }
     },
     "definitions": {

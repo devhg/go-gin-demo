@@ -10,31 +10,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/devhg/go-gin-demo/handler/common"
+	"github.com/devhg/go-gin-demo/common/e"
 	"github.com/devhg/go-gin-demo/middleware/crypto"
 	"github.com/devhg/go-gin-demo/model/dao"
 	"github.com/devhg/go-gin-demo/model/service/user"
 	"github.com/devhg/go-gin-demo/pkg/app"
 	"github.com/devhg/go-gin-demo/pkg/config"
-	"github.com/devhg/go-gin-demo/pkg/e"
 	"github.com/devhg/go-gin-demo/pkg/logging"
 	"github.com/devhg/go-gin-demo/pkg/util"
 )
-
-func Register(route *gin.RouterGroup) {
-	userRoute := route.Group("user")
-	{
-		userRoute.POST("/login", common.GetAuth)
-		userRoute.POST("/register", Registe)
-		userRoute.POST("/feedback", AddFeedback)
-		userRoute.POST("/updatePwd", UpdatePwd)
-
-		userRoute.GET("/info/:uid", GetUserinfoByUID)
-		userRoute.GET("/stat/:uid", GetTrainStat)
-		userRoute.GET("/standing", GetUserinfos)
-		userRoute.GET("/notice", GetNotices)
-	}
-}
 
 func GetUserinfos(c *gin.Context) {
 	appG := app.Gin{C: c}
@@ -59,13 +43,13 @@ func GetUserinfos(c *gin.Context) {
 
 	infos, err := us.GetAllInfo()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
+		appG.NewJSONResponse(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
 		return
 	}
 	var total int64
 	total, err = us.InfoCount()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
+		appG.NewJSONResponse(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
 		return
 	}
 	resp := map[string]interface{}{
@@ -74,10 +58,10 @@ func GetUserinfos(c *gin.Context) {
 	}
 	// 历史遗留问题
 	if _, ok := query["export"]; ok {
-		appG.Response(http.StatusOK, e.SUCCESS, infos)
+		appG.NewJSONResponse(http.StatusOK, e.SUCCESS, infos)
 		return
 	}
-	appG.Response(http.StatusOK, e.SUCCESS, resp)
+	appG.NewJSONResponse(http.StatusOK, e.SUCCESS, resp)
 }
 
 func GetUserinfoByUID(c *gin.Context) {
@@ -90,10 +74,10 @@ func GetUserinfoByUID(c *gin.Context) {
 
 	info, err := us.GetInfoByUID()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
+		appG.NewJSONResponse(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
 		return
 	}
-	appG.Response(http.StatusOK, e.SUCCESS, info)
+	appG.NewJSONResponse(http.StatusOK, e.SUCCESS, info)
 }
 
 type Feedback struct {
@@ -108,7 +92,7 @@ func AddFeedback(c *gin.Context) {
 	logging.Info(feed)
 
 	if errCode != e.SUCCESS {
-		appG.Response(httpCode, errCode, errMsg)
+		appG.NewJSONResponse(httpCode, errCode, errMsg)
 		return
 	}
 
@@ -117,17 +101,17 @@ func AddFeedback(c *gin.Context) {
 		Contact: feed.Content,
 	}
 	if ok := us.AddFeedback(); !ok {
-		appG.Response(http.StatusBadRequest, e.ERROR, nil)
+		appG.NewJSONResponse(http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
-	appG.Response(http.StatusOK, e.SUCCESS, nil)
+	appG.NewJSONResponse(http.StatusOK, e.SUCCESS, nil)
 }
 
 func GetNotices(c *gin.Context) {
 	appG := app.Gin{C: c}
 
 	if notices, err := dao.GetAllNotices(); err != nil {
-		appG.Response(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
+		appG.NewJSONResponse(http.StatusInternalServerError, e.ERROR_NOT_EXIST, nil)
 	} else {
 		marshal, _ := json.Marshal(&notices)
 		fmt.Println(string(marshal))
@@ -140,7 +124,7 @@ func GetNotices(c *gin.Context) {
 		decrypted := crypto.AesDecryptECB(encrypted, []byte(secret))
 		log.Println("解密结果：", string(decrypted))
 
-		appG.Response(http.StatusOK, e.SUCCESS, base64.StdEncoding.EncodeToString(encrypted))
+		appG.NewJSONResponse(http.StatusOK, e.SUCCESS, base64.StdEncoding.EncodeToString(encrypted))
 	}
 }
 
